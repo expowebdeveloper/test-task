@@ -1,36 +1,37 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import HorSlider from "./HorSlider";
+import NewProductCard from "./NewProductCard";
 
-const ShopBy = ({ filter, title }) => {
-  const [products, setProducts] = useState([]);
+const ShopBy = ({ filter, title, products = [] }) => {
+  // const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    let isMounted = true;
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/api/filter/${filter}`
-        );
-        if (isMounted) {
-          setProducts(res.data);
-          setLoading(false);
-        }
-      } catch (err) {
-        if (isMounted) {
-          console.error(`Error while fetching products: ${err.message}`);
-          setError(err);
-          setLoading(false);
-        }
-      }
-    };
-    fetchData();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         `${import.meta.env.VITE_BASE_URL}/api/filter/${filter}`
+  //       );
+  //       if (isMounted) {
+  //         setProducts(res.data);
+  //         setLoading(false);
+  //       }
+  //     } catch (err) {
+  //       if (isMounted) {
+  //         console.error(`Error while fetching products: ${err.message}`);
+  //         setError(err);
+  //         setLoading(false);
+  //       }
+  //     }
+  //   };
+  //   fetchData();
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, []);
 
   return (
     <>
@@ -41,14 +42,20 @@ const ShopBy = ({ filter, title }) => {
 
         <div className="flex flex-nowrap space-x-4">
           {/* Ensure products is always an array */}
-          {(Array.isArray(products) ? products : []).map((elem) => (
+          {/* {(Array.isArray(products) ? products : []).map((elem) => (
             <HorSlider
               product={elem}
               key={elem._id || elem.id} // fallback if _id is missing
               className="inline-block"
               home={true}
             />
-          ))}
+          ))} */}
+
+          {
+            products.map((elem, idx) => (
+              <NewProductCard product={elem} key={idx} />
+            ))
+          }
         </div>
       </div>
     </>
